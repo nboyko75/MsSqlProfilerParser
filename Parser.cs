@@ -44,7 +44,7 @@ namespace MsSqlLogParse
             string sSql = mcMain[0].Groups["sql"].Value;
             string sParamValStr = mcMain[0].Groups["paramval"].Value;
             List<string> ParamVals = new List<string>();
-            /* Занесення значень в ParamVals */
+            /* put parameter values to ParamVals */
             int posDelim = sParamValStr.IndexOf(ParamDelim);
             if (posDelim > 0)
             {
@@ -87,7 +87,7 @@ namespace MsSqlLogParse
                 ParamVals.Add(sParamValStr);
             }
 
-            /* Занесення значень списків в ParamVals */
+            /* Put list parameters to ParamVals */
             if (inListSql.Length > 0)
             {
                 Regex reInlist = new Regex(InlistPattern, RegexOptions.Singleline);
@@ -131,7 +131,7 @@ namespace MsSqlLogParse
                 }
             }
 
-            /* Заміна значень параметрів */
+            /* Parameter values replacement */
             for (int i = ParamVals.Count; i > 0; i--)
             {
                 string paramName = ParamPrefix + i.ToString();
@@ -139,10 +139,10 @@ namespace MsSqlLogParse
                 sSql = sSql.Replace(paramName, paramValue);
             }
 
-            /* Форматування */
+            /* Formatting */
             SqlBlock sqlObj = new SqlBlock(sSql);
 
-            /* Занесення в буфер обміну */
+            /* Set result back to clipboard */
             Clipboard.SetText(sqlObj.GetString());
             return null;
         }

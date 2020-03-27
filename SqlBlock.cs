@@ -85,7 +85,7 @@ namespace MsSqlLogParse
             parseParts();
             parseIdentBlocks();
 
-            /* Відступи по рівню вкладеності */
+            /* Set offset depend on level */
             SortedDictionary<int, string> insStr = new SortedDictionary<int, string>();
             foreach (SqlKey sqlkey in EnterKeys)
             {
@@ -103,13 +103,13 @@ namespace MsSqlLogParse
                         string insertStr = sqlkey.breakLineBefore ? BR + prefix + new String(CTAB, lvl) + new String(CTAB, blockIdents) : "";
                         if (this.sql[pos - 1].ToString() == PartBegin)
                         {
-                            /* щоб переносити "(SELECT" разом зі скобкою */
+                            /* to break line "(SELECT" with the bracket */
                             pos--;
                         }
                         insStr.Add(pos, insertStr);
                         if (sqlkey.breakLineAfter) 
                         {
-                            /* Для блоків "EXISTS" та "NOT EXISTS" шукати кінець блоку і зробити перенос після нього */
+                            /* For "EXISTS" and "NOT EXISTS" blocks: find block end and do break line */
                             int blockBegPos = this.sql.IndexOf(PartBegin, pos + match.Value.Length - 1);
                             if (blockBegPos > 0) 
                             {
@@ -147,7 +147,7 @@ namespace MsSqlLogParse
             checkLineWidth();
         }
 
-        /* Встановлення відступів для блоків з дужками (...) */
+        /* Set offsets for blocks with brackets (...) */
         private void parseParts()
         {
             parts.Clear();
@@ -207,7 +207,7 @@ namespace MsSqlLogParse
             } while (nextPos > -1);
         }
 
-        /* Встановлення відступів для блоків LEFT JOIN, INNER JOIN, EXISTS */
+        /* Set offsets for blocks LEFT JOIN, INNER JOIN, EXISTS */
         private void parseIdentBlocks()
         {
             identBlocks.Clear();
@@ -449,7 +449,7 @@ namespace MsSqlLogParse
 
         private void checkLineWidth() 
         {
-            /* Розриви довгих рядків */
+            /* Long line breaks */
             int allLen = this.sql.Length;
             if (allLen > LineWidth)
             {
