@@ -32,7 +32,7 @@ namespace MsSqlLogParse
             if (inputStr.Length == 0)
                 return null;
 
-            Regex reMain = new Regex(AllPattern, RegexOptions.Multiline | RegexOptions.IgnoreCase);
+            Regex reMain = new Regex(AllPattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
             MatchCollection mcMain = reMain.Matches(inputStr);
 
             if (mcMain.Count == 0 || mcMain[0].Groups.Count < 4)
